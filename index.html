@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteWave</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="header">&nbsp;NoteWave&nbsp;
+        <icon id="header-icon"></icon></div>
+    <div1 id="note-info"><input type="text" id="note-title" class="note-input" placeholder="Note Title">
+        <button id="save-note"></button>
+        <button id="load-note"></button></div1>
+    <textarea id="note-content" class="note-textarea" placeholder="Take notes here!"></textarea>
+
+    <input type="file" id="file-input" accept=".txt" style="display: none;">
+</body>
+</html>
+
+<script>
+    const save_button = document.getElementById("save-note");
+    const load_button = document.getElementById("load-note");
+    const file_input = document.getElementById("file-input");
+    save_button.addEventListener("click", function() {
+        const noteContent = document.getElementById("note-content").value;
+        if(noteContent.length==0){
+            return;
+        }
+        const noteTitle = document.getElementById("note-title").value;
+        const blob = new Blob([noteContent], {type: "text/plain"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = (noteTitle + ".txt");
+        link.click();
+        console.log("Button Clicked!");
+        URL.revokeObjectURL(link.href);
+    });
+
+    load_button.addEventListener('click', () => {
+        file_input.click();
+    });
+
+    file_input.addEventListener('change', (event) => {
+        const file = event.target.files[0]; // get the selected file
+        if (file) {
+            const reader = new FileReader();
+            const file_name = file.name.split('.').slice(0, -1).join('.');
+            reader.onload = function (e) {
+                document.getElementById("note-content").value = e.target.result;
+                document.getElementById("note-title").value = file_name;
+            };
+            reader.readAsText(file);
+        }
+    });
+</script>
+
+<style>
+    body {
+        background-color: #151515;
+        font-family: 'Inter', sans-serif;
+        color:white;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 10px;
+        gap: 8px;
+        height: calc(100vh - (65px));
+        background-image: url("icons/background.webp");
+        background:
+            linear-gradient(
+                rgba(0, 0, 0, 0.8), 
+                rgba(0, 0, 0, 0.8)
+            ),
+            url("icons/background.webp");
+    }
+
+    div {
+        font-family: 'Inter', sans-serif;
+        color:white;
+        background-color: rgb(0, 63, 63);
+        display: flex;
+        vertical-align: top;
+        font-size: 60px;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    #header-icon {
+        background-image: url('./icons/wave-icon.svg');
+        width: 68px;
+        height: 68px;
+        align-self: center;
+        position-anchor: left;
+        outline-color: white;
+        border-radius: 75px;
+        background-color: rgb(0,120,120);
+    }
+
+    textarea {
+        resize: none;
+        align-self: top;
+        width: fit-content;
+        height: fit-content;
+        border: none;
+        border-radius: 5px;
+        font-family: 'Inter', sans-serif;
+        font-size: small;
+        width: 100%;
+        flex-grow: 1;
+        background-color:#1c1c1c;
+        border-color: #1c1c1c;
+        color: white;
+        outline: none;
+    }
+
+    input {
+        width: fit-content;
+        position-anchor: top;
+        border-color: rgb(0, 63, 63);
+        border-radius: 4px;
+        border-style: solid;
+        color: white;
+        position: relative;
+        padding-block: 4px;
+        font-family: 'Inter', sans-serif;
+        font-size: medium;
+        background-color: transparent;
+    }
+    input:focus{
+        outline-color: black;
+        border-color: #151515;
+        transition: 0.25s;
+    }
+
+    #save-note {
+        position: relative;
+        top: 7px;
+        width:32px;
+        height:32px;
+        background-image: url('./icons/software-download.svg');
+        background-position: 50%;
+        background-color: rgb(0, 43, 43);
+        border-color: rgb(0, 63, 63);
+        outline: none;
+        box-shadow: none;
+        border-radius: 4px;
+        border-style: solid;
+    }
+    #save-note:active{
+        background-color: transparent;
+        border-color: rgb(0, 113, 113);;
+        transition: 0.1s;
+    }
+
+    #load-note {
+        position: relative;
+        top: 7px;
+        width:32px;
+        height:32px;
+        background-image: url('./icons/enter.svg');
+        background-position: 50%;
+        background-color: rgb(0, 43, 43);
+        border-color: rgb(0, 63, 63);
+        outline: none;
+        box-shadow: none;
+        border-radius: 4px;
+        border-style: solid;
+    }
+    #load-note:active{
+        background-color: transparent;
+        border-color: rgb(0, 113, 113);;
+        transition: 0.1s;
+    }
+</style>
